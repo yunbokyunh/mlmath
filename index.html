@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ML MATH — 무료 수학 레벨테스트</title>
+    <meta name="description" content="IGCSE & Add Math 전문 레벨테스트. 공대 석사 출신 선생님의 정밀 진단으로 우리 아이 수학 실력을 정확히 파악하세요.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        :root{--s9:#0f172a;--s8:#1e293b;--s7:#334155;--s6:#475569;--s5:#64748b;--s4:#94a3b8;--s3:#cbd5e1;--s2:#e2e8f0;--s1:#f1f5f9;--s0:#f8fafc;--b7:#1d4ed8;--b6:#2563eb;--b5:#3b82f6;--b1:#dbeafe;--b0:#eff6ff;--a6:#d97706;--a1:#fef3c7;--a0:#fffbeb;--e6:#059669;--e1:#d1fae5;--e0:#ecfdf5;--v6:#7c3aed;--v1:#ede9fe;--v0:#f5f3ff;--r6:#e11d48;--r1:#ffe4e6;--w:#fff}
+        html,body{height:100%;overflow:hidden}
+        body{font-family:'Noto Sans KR','DM Sans',sans-serif;background:#e8ecf4;display:flex;flex-direction:column}
+
+        /* Top bar */
+        .top-bar{background:var(--s9);padding:14px 24px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;z-index:10}
+        .logo{font-family:'DM Sans',sans-serif;font-weight:700;font-size:18px;color:var(--w);letter-spacing:2px}.logo span{color:var(--b5)}
+        .top-badge{font-size:10px;color:var(--s3);letter-spacing:1.5px;text-transform:uppercase;background:rgba(255,255,255,.08);padding:4px 12px;border-radius:16px}
+
+        /* Progress */
+        .progress-track{height:3px;background:var(--s8);flex-shrink:0}
+        .progress-fill{height:100%;background:linear-gradient(90deg,var(--b6),var(--b5),#818cf8);transition:width .5s cubic-bezier(.4,0,.2,1)}
+
+        /* Scroll */
+        .scroll-area{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
+        .scroll-inner{max-width:740px;margin:0 auto;padding:20px 16px 100px}
+
+        /* Navigation */
+        .fixed-nav{position:fixed;bottom:0;left:0;right:0;background:var(--w);border-top:1px solid var(--s2);padding:14px 20px;display:none;justify-content:space-between;align-items:center;z-index:20;box-shadow:0 -4px 20px rgba(0,0,0,.06)}
+        .fixed-nav.show{display:flex}
+        .btn{padding:11px 22px;font-family:'Noto Sans KR',sans-serif;font-size:14px;font-weight:500;border:none;border-radius:10px;cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent}
+        .btn:active:not(:disabled){transform:scale(.97)}
+        .btn-prev{background:var(--s1);color:var(--s6)}.btn-prev:hover:not(:disabled){background:var(--s2)}
+        .btn-next{background:var(--s9);color:var(--w)}.btn-next:hover{background:var(--s8)}
+        .btn:disabled{opacity:.3;cursor:not-allowed}
+        .page-indicator{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--s4)}
+
+        /* Cards */
+        .card{background:var(--w);border-radius:16px;box-shadow:0 2px 8px rgba(0,0,0,.06);overflow:hidden;margin-bottom:16px}
+        .screen{display:none}.screen.active{display:block}
+
+        /* ===== LANDING PAGE ===== */
+        .hero{padding:32px 24px 24px;text-align:center}
+        .hero-badge{display:inline-block;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;color:var(--b6);background:var(--b0);padding:5px 14px;border-radius:20px;margin-bottom:14px;letter-spacing:.5px}
+        .hero h1{font-size:22px;font-weight:700;color:var(--s9);line-height:1.5;margin-bottom:6px}
+        .hero h1 em{font-style:normal;color:var(--b6)}
+        .hero-sub{font-size:13px;color:var(--s5);line-height:1.7;margin-bottom:20px}
+        .hero-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:20px}
+        .hero-stat{background:var(--s0);border-radius:10px;padding:14px 8px;text-align:center}
+        .hero-stat .n{font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;color:var(--s9)}
+        .hero-stat .l{font-size:10px;color:var(--s5);margin-top:2px}
+        .usp-list{text-align:left;margin-bottom:20px}
+        .usp{display:flex;gap:10px;align-items:flex-start;padding:10px 16px;background:var(--s0);border-radius:10px;margin-bottom:6px}
+        .usp .ic{font-size:18px;flex-shrink:0;margin-top:1px}
+        .usp .tx{font-size:13px;color:var(--s7);line-height:1.6}
+        .usp .tx b{color:var(--s9)}
+
+        /* ===== REGISTRATION FORM ===== */
+        .reg-pad{padding:24px}
+        .reg-pad h2{font-size:17px;color:var(--s9);margin-bottom:4px}
+        .reg-sub{font-size:12px;color:var(--s5);margin-bottom:16px}
+        .form-group{margin-bottom:12px}
+        .form-label{font-size:11px;font-weight:600;color:var(--s6);margin-bottom:4px;display:flex;align-items:center;gap:4px}
+        .form-label .req{color:var(--r6);font-size:10px}
+        .form-input{width:100%;border:1.5px solid var(--s2);border-radius:10px;padding:12px 14px;font-family:'Noto Sans KR',sans-serif;font-size:14px;color:var(--s8);outline:none;transition:border .2s}
+        .form-input:focus{border-color:var(--b5);box-shadow:0 0 0 3px rgba(59,130,246,.08)}
+        .form-input::placeholder{color:var(--s4);font-size:13px}
+        select.form-input{-webkit-appearance:none;appearance:none;background:var(--w) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 14px center}
+        .form-hint{font-size:11px;color:var(--s4);margin-top:3px}
+        .form-error{font-size:11px;color:var(--r6);margin-top:3px;display:none}
+        .addm-toggle{display:flex;gap:6px;margin-bottom:8px}
+        .addm-btn{flex:1;padding:12px 8px;font-family:'Noto Sans KR',sans-serif;font-size:13px;font-weight:500;border:1.5px solid var(--s2);border-radius:10px;background:var(--w);color:var(--s6);cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent}
+        .addm-btn:active{transform:scale(.98)}
+        .addm-btn.active{border-color:var(--b6);background:var(--b0);color:var(--b7);font-weight:600;box-shadow:0 0 0 3px rgba(59,130,246,.1)}
+        .addm-info{font-size:12px;color:var(--s5);padding:10px 14px;background:var(--s0);border-radius:8px;display:flex;align-items:center;gap:8px;transition:all .3s}
+        .addm-tag{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;padding:3px 8px;border-radius:5px;white-space:nowrap}
+        .addm-tag.igcse{background:var(--b1);color:var(--b7)}
+        .addm-tag.full{background:var(--v1);color:var(--v6)}
+
+        .warn-box{background:var(--a0);border:1px solid var(--a1);border-radius:10px;padding:12px 14px;margin-bottom:16px;display:flex;gap:8px;align-items:flex-start}
+        .warn-box .ic{font-size:16px;flex-shrink:0}.warn-box p{font-size:12px;color:var(--s7);line-height:1.6}
+        .privacy-note{font-size:11px;color:var(--s5);text-align:center;margin-top:14px;line-height:1.6;background:var(--s0);padding:12px 16px;border-radius:10px;border:1px solid var(--s2)}
+
+        /* ===== BUTTONS ===== */
+        .btn-big{width:100%;padding:15px;font-family:'Noto Sans KR',sans-serif;font-size:15px;font-weight:600;border:none;border-radius:12px;cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent}
+        .btn-big:active{transform:scale(.98)}
+        .btn-big.primary{background:var(--s9);color:var(--w)}.btn-big.primary:hover{background:var(--s8)}
+        .btn-big.blue{background:var(--b6);color:var(--w)}.btn-big.blue:hover{background:var(--b7)}
+        .btn-big.secondary{background:var(--s1);color:var(--s7);margin-top:8px;font-size:13px;font-weight:500}.btn-big.secondary:hover{background:var(--s2)}
+        .btn-big:disabled{opacity:.5;cursor:not-allowed}
+        .file-hidden{display:none}
+
+        /* ===== QUESTION SCREENS ===== */
+        .part-strip{display:flex;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid var(--s1)}
+        .part-badge{font-family:'JetBrains Mono','DM Sans',sans-serif;font-size:11px;font-weight:500;padding:4px 10px;border-radius:5px;white-space:nowrap}
+        .part-a .part-badge{background:var(--b1);color:var(--b7)}
+        .part-b .part-badge{background:var(--a1);color:var(--a6)}
+        .part-c .part-badge{background:var(--v1);color:var(--v6)}
+        .part-d .part-badge{background:var(--e1);color:var(--e6)}
+        .part-e .part-badge{background:var(--r1);color:var(--r6)}
+        .part-info{flex:1}.part-title{font-size:13px;font-weight:600;color:var(--s8)}.part-focus{font-size:11px;color:var(--s5);margin-top:1px}
+        .part-time{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--s4);background:var(--s0);padding:3px 8px;border-radius:5px}
+        .q-pad{padding:22px 20px}
+        .q-label{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+        .q-num{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;color:var(--b6);background:var(--b0);padding:4px 10px;border-radius:6px}
+        .q-cat{font-size:12px;color:var(--s5);font-weight:500}
+        .q-dot{width:7px;height:7px;border-radius:50%;background:var(--e6);margin-left:auto;display:none}.q-dot.on{display:block}
+        .q-body{font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.85;color:var(--s7)}
+        .q-body b,.q-body strong{color:var(--s9);font-weight:700}
+        .q-body .sub{margin-top:12px;padding-left:2px}.q-body .sub p{margin-bottom:8px;line-height:1.75}
+        .m{font-family:'JetBrains Mono',monospace;font-size:.9em;color:var(--s9);letter-spacing:.3px;background:var(--s0);padding:1px 4px;border-radius:3px}
+        .math-box{display:flex;justify-content:center;align-items:center;margin:16px 0;padding:18px 20px;background:var(--s0);border-radius:10px;border:1px solid var(--s2)}
+        .math-box .m{font-size:1.1em;background:none;padding:0}
+        .frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 3px}
+        .frac .top,.frac .bot{padding:2px 5px;text-align:center;line-height:1.4}.frac .top{border-bottom:2px solid var(--s7)}
+        .sup{font-size:.72em;vertical-align:super;line-height:0}
+        .ans-card{padding:16px 20px}
+        .ans-label{font-size:11px;font-weight:600;color:var(--s5);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+        .ans-hint{font-size:11px;color:var(--s4);margin-bottom:8px}
+        .ans-input{width:100%;border:1.5px solid var(--s2);border-radius:8px;padding:10px 12px;font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--s9);outline:none;transition:border .2s}
+        .ans-input:focus{border-color:var(--b5);box-shadow:0 0 0 3px rgba(59,130,246,.08)}
+        .ans-input::placeholder{color:var(--s4);font-family:'Noto Sans KR',sans-serif;font-size:12px}
+
+        /* ===== SUBMIT SCREEN ===== */
+        .submit-pad{padding:28px 24px}
+        .submit-pad h2{font-size:18px;color:var(--s9);margin-bottom:5px}
+        .submit-sub{font-size:13px;color:var(--s5);margin-bottom:20px}
+        .ap-row{display:flex;align-items:baseline;gap:10px;padding:8px 0;border-bottom:1px solid var(--s1)}
+        .ap-row:last-child{border-bottom:none}
+        .ap-num{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;color:var(--b6);min-width:28px}
+        .ap-ans{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--s9);flex:1;word-break:break-all}
+        .ap-ans.empty{font-family:'Noto Sans KR',sans-serif;color:var(--s4);font-style:italic;font-size:12px}
+        .part-sep{padding:12px 16px;background:var(--s0);border-radius:10px;margin:8px 0 4px;display:flex;align-items:center;gap:8px}
+        .part-sep .ps-badge{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;padding:3px 8px;border-radius:4px}
+        .part-sep .ps-name{font-size:12px;font-weight:600;color:var(--s7)}
+        .upload-section{margin-bottom:20px}
+        .upload-label{font-size:13px;font-weight:600;color:var(--s9);margin-bottom:4px}
+        .upload-desc{font-size:12px;color:var(--s5);margin-bottom:12px;line-height:1.6}
+        .upload-area{border:2px dashed var(--s2);border-radius:12px;padding:24px;text-align:center;cursor:pointer;transition:all .2s;position:relative}
+        .upload-area:hover{border-color:var(--b5);background:var(--b0)}
+        .upload-area input{position:absolute;inset:0;opacity:0;cursor:pointer}
+        .upload-icon{font-size:28px;margin-bottom:8px}
+        .upload-text{font-size:13px;color:var(--s5)}.upload-text b{color:var(--b6)}
+        .file-list{margin-top:12px}
+        .file-item{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--s0);border-radius:8px;margin-bottom:6px;font-size:12px;color:var(--s7)}
+        .file-item .fname{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+        .file-item .fsize{color:var(--s4);font-family:'JetBrains Mono',monospace;font-size:11px}
+        .file-remove{background:none;border:none;color:var(--r6);cursor:pointer;font-size:14px;padding:2px 6px}
+        .btn-submit{width:100%;padding:15px;font-family:'Noto Sans KR',sans-serif;font-size:15px;font-weight:600;border:none;border-radius:12px;cursor:pointer;transition:all .15s;margin-bottom:8px}
+        .btn-submit:active:not(:disabled){transform:scale(.98)}
+        .btn-submit.email{background:var(--b6);color:var(--w)}.btn-submit.email:hover{background:var(--b7)}
+        .btn-submit.download{background:var(--s9);color:var(--w)}.btn-submit.download:hover{background:var(--s8)}
+        .btn-submit.back{background:var(--s1);color:var(--s7);font-size:13px;font-weight:500}.btn-submit.back:hover{background:var(--s2)}
+        .btn-submit:disabled{opacity:.5;cursor:not-allowed}
+        .sending-text{font-size:12px;color:var(--s4);text-align:center;margin-top:8px;line-height:1.6}
+
+        /* ===== DONE SCREEN ===== */
+        .done-pad{padding:36px 24px;text-align:center}
+        .done-icon{font-size:52px;margin-bottom:12px}
+        .done-pad h2{font-size:20px;color:var(--s9);margin-bottom:6px}
+        .done-pad .done-msg{font-size:13px;color:var(--s5);line-height:1.8;margin-bottom:24px}
+        .done-card{background:var(--b0);border:1px solid var(--b1);border-radius:12px;padding:20px;margin-bottom:16px;text-align:left}
+        .done-card h3{font-size:14px;color:var(--b7);margin-bottom:8px}
+        .done-card p{font-size:12px;color:var(--s7);line-height:1.7;margin-bottom:4px}
+        .done-timeline{display:flex;gap:4px;align-items:center;margin-top:12px}
+        .done-step{flex:1;text-align:center;padding:10px 4px;background:var(--w);border-radius:8px}
+        .done-step .ds-icon{font-size:20px;margin-bottom:3px}
+        .done-step .ds-text{font-size:10px;color:var(--s6);line-height:1.3}
+        .done-arrow{color:var(--s3);font-size:16px;flex-shrink:0}
+        .kakao-btn{width:100%;padding:15px;font-family:'Noto Sans KR',sans-serif;font-size:15px;font-weight:600;border:none;border-radius:12px;cursor:pointer;background:#FEE500;color:#3C1E1E;margin-bottom:8px;transition:all .15s}
+        .kakao-btn:active{transform:scale(.98)}
+        .kakao-btn:hover{background:#fdd835}
+
+        /* ===== REVIEW (teacher) ===== */
+        .review-pad{padding:28px 24px}
+        .review-pad h2{font-size:17px;color:var(--s9);margin-bottom:3px}
+        .rv-sub{font-size:12px;color:var(--s5);margin-bottom:5px}
+        .rv-name{font-size:14px;font-weight:600;color:var(--b6);margin-bottom:2px}
+        .rv-date{font-size:11px;color:var(--s4);font-family:'JetBrains Mono',monospace;margin-bottom:16px}
+        .rv-stats{display:flex;gap:8px;margin-bottom:20px}
+        .rv-stat{flex:1;background:var(--s0);border-radius:8px;padding:12px;text-align:center}
+        .rv-stat .n{font-size:20px;font-weight:700;color:var(--s9)}.rv-stat .l{font-size:10px;color:var(--s4);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+        .rv-card{border:1px solid var(--s2);border-radius:10px;margin-bottom:12px;overflow:hidden}
+        .rv-head{display:flex;align-items:center;gap:8px;padding:11px 14px;background:var(--s0);border-bottom:1px solid var(--s2)}
+        .rv-num{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;color:var(--b6);background:var(--b0);padding:3px 8px;border-radius:5px}
+        .rv-cat{font-size:12px;color:var(--s5);font-weight:500}
+        .rv-tag{font-size:10px;margin-left:auto;padding:2px 7px;border-radius:4px;font-weight:500}
+        .rv-tag.ok{background:var(--e0);color:var(--e6)}.rv-tag.no{background:var(--a0);color:var(--a6)}
+        .rv-body{padding:14px;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.6;color:var(--s9)}
+        .rv-body.empty{font-family:'Noto Sans KR',sans-serif;color:var(--s4);font-style:italic;font-size:12px}
+        .rv-images{padding:14px;border-top:1px solid var(--s1)}
+        .rv-images h4{font-size:12px;color:var(--s5);margin-bottom:10px}
+        .rv-img{max-width:100%;border-radius:8px;margin-bottom:8px;border:1px solid var(--s2)}
+        .rv-btns{display:flex;gap:8px;margin-top:20px}
+        .rv-btns .btn-submit{flex:1}
+        .rv-contact{background:var(--v0);border:1px solid var(--v1);border-radius:10px;padding:14px;margin-bottom:16px}
+        .rv-contact h4{font-size:12px;color:var(--v6);margin-bottom:6px}
+        .rv-contact p{font-size:12px;color:var(--s7);line-height:1.6}
+
+        /* Toast */
+        .toast{position:fixed;top:60px;left:50%;transform:translateX(-50%) translateY(-60px);background:var(--s9);color:var(--w);padding:10px 20px;border-radius:10px;font-size:13px;font-weight:500;opacity:0;transition:all .35s cubic-bezier(.4,0,.2,1);pointer-events:none;z-index:50;box-shadow:0 6px 20px rgba(0,0,0,.2)}
+        .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+        @media print{body{background:#fff;overflow:visible}.top-bar,.progress-track,.fixed-nav,.rv-btns,.rv-stats{display:none!important}.scroll-area{overflow:visible}.scroll-inner{padding:10px}.card{box-shadow:none;border:1px solid #ddd}.rv-card{break-inside:avoid}}
+        @media(max-width:600px){.hero-stats{grid-template-columns:1fr 1fr 1fr}.rv-stats,.rv-btns{flex-direction:column}.done-timeline{flex-wrap:wrap}}
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+</head>
+<body>
+<div class="top-bar"><div class="logo">ML <span>MATH</span></div><div class="top-badge">Free Diagnostic Test</div></div>
+<div class="progress-track"><div class="progress-fill" id="pf" style="width:0%"></div></div>
+<div class="scroll-area" id="scroll">
+<div class="scroll-inner">
+
+    <!-- ===== SCREEN: LANDING ===== -->
+    <div class="screen active" id="s-landing">
+        <div class="card"><div class="hero">
+            <div class="hero-badge">🎓 IGCSE & Add Math 전문</div>
+            <h1>우리 아이 수학,<br><em>정확히</em> 어디서 막히는지<br>알고 계신가요?</h1>
+            <div class="hero-sub">공대 석사 출신 선생님이 직접 설계한 정밀 진단 테스트로<br>아이의 현재 수준과 보완점을 무료로 분석해 드립니다.</div>
+            <div class="hero-stats">
+                <div class="hero-stat"><div class="n">12~25</div><div class="l">문항</div></div>
+                <div class="hero-stat"><div class="n">30~45</div><div class="l">분</div></div>
+                <div class="hero-stat"><div class="n">5</div><div class="l">영역 진단</div></div>
+            </div>
+            <div class="usp-list">
+                <div class="usp"><div class="ic">🎯</div><div class="tx"><b>"공식은 아는데 응용이 안 돼요"</b><br>개념 이해도와 적용 능력을 동시에 점검합니다.</div></div>
+                <div class="usp"><div class="ic">📝</div><div class="tx"><b>"Show that" 서술 능력 평가</b><br>한국 수학에 없는 영국식 증명 문제 대응력을 진단합니다.</div></div>
+                <div class="usp"><div class="ic">📊</div><div class="tx"><b>맞춤 분석 리포트 제공</b><br>테스트 후 48시간 내에 상세 분석 결과를 보내드립니다.</div></div>
+            </div>
+            <button class="btn-big primary" onclick="show('s-register')">무료 레벨테스트 시작하기 →</button>
+        </div></div>
+    </div>
+
+    <!-- ===== SCREEN: REGISTRATION ===== -->
+    <div class="screen" id="s-register">
+        <div class="card"><div class="reg-pad">
+            <h2>📋 학생 정보 입력</h2>
+            <div class="reg-sub">테스트 결과 분석을 위해 아래 정보를 입력해 주세요.</div>
+
+            <div class="form-group">
+                <div class="form-label">학생 이름 <span class="req">*필수</span></div>
+                <input type="text" class="form-input" id="inp-name" placeholder="학생 이름을 입력하세요">
+            </div>
+            <div class="form-group">
+                <div class="form-label">학교</div>
+                <input type="text" class="form-input" id="inp-school" placeholder="예: HELP International School">
+            </div>
+            <div class="form-group">
+                <div class="form-label">학년 (Year Group) <span class="req">*필수</span></div>
+                <select class="form-input" id="inp-year">
+                    <option value="">선택하세요</option>
+                    <option value="Year 7">Year 7</option>
+                    <option value="Year 8">Year 8</option>
+                    <option value="Year 9">Year 9</option>
+                    <option value="Year 10">Year 10</option>
+                    <option value="Year 11">Year 11</option>
+                    <option value="Year 12">Year 12 (AS Level)</option>
+                    <option value="Year 13">Year 13 (A Level)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <div class="form-label">보호자 연락처 (카카오톡 ID 또는 전화번호) <span class="req">*필수</span></div>
+                <input type="text" class="form-input" id="inp-contact" placeholder="예: +60 12-345-6789 또는 카카오톡 ID">
+                <div class="form-hint">분석 결과를 보내드리기 위해 필요합니다. (말레이시아 +60 / 한국 +82)<br>📌 테스트 제출 후 <a href="https://open.kakao.com/o/ssOgKj8h" target="_blank" style="color:var(--b6);text-decoration:underline">카카오톡 오픈채팅</a>으로 연락주시면 더 빠르게 결과를 받으실 수 있습니다.</div>
+            </div>
+            <div class="form-group">
+                <div class="form-label">Additional Mathematics 수강 여부 <span class="req">*필수</span></div>
+                <div class="addm-toggle" id="addm-toggle">
+                    <button type="button" class="addm-btn active" id="addm-no" onclick="setAddMath(false)">IGCSE Math만</button>
+                    <button type="button" class="addm-btn" id="addm-yes" onclick="setAddMath(true)">IGCSE + Add Math</button>
+                </div>
+                <div class="addm-info" id="addm-info">
+                    <span class="addm-tag igcse">IGCSE Only</span> 12문항 · 30분 · 기초~핵심 적용
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="form-label">보호자 이메일 (선택)</div>
+                <input type="email" class="form-input" id="inp-email" placeholder="예: parent@email.com">
+            </div>
+
+            <div class="warn-box"><div class="ic">⚠️</div><p><strong>시험 안내:</strong> 계산기 사용 금지. 각 문제의 <b>최종 답</b>만 입력하고, <b>풀이 과정</b>은 공책이나 아이패드에 작성 후 마지막에 사진으로 업로드하세요.</p></div>
+
+            <div id="reg-error" class="form-error" style="text-align:center;margin-bottom:12px"></div>
+            <button class="btn-big blue" onclick="startTest()">테스트 시작 →</button>
+            <button class="btn-big secondary" onclick="show('s-landing')">← 돌아가기</button>
+            <div class="privacy-note">🔒 입력된 정보는 레벨테스트 분석 목적으로만 사용되며,<br>제3자에게 제공되지 않습니다.</div>
+        </div></div>
+        <!-- Teacher-only load button (hidden) -->
+        <button class="btn-big secondary" onclick="document.getElementById('f-load').click()" style="margin-top:4px;font-size:11px;color:var(--s4)">📂 선생님용: 저장된 답안 불러오기</button>
+        <input type="file" id="f-load" class="file-hidden" accept=".json" onchange="loadFile(event)">
+    </div>
+
+    <!-- ===== SCREEN: QUESTION ===== -->
+    <div class="screen" id="s-q">
+        <div class="card">
+            <div class="part-strip" id="ps"><div class="part-badge" id="pb"></div><div class="part-info"><div class="part-title" id="pt"></div><div class="part-focus" id="pfo"></div></div><div class="part-time" id="ptm"></div></div>
+            <div class="q-pad"><div class="q-label"><div class="q-num" id="qn"></div><div class="q-cat" id="qc"></div><div class="q-dot" id="qd"></div></div><div class="q-body" id="qb"></div></div>
+        </div>
+        <div class="card"><div class="ans-card">
+            <div class="ans-label">✏️ Answer</div>
+            <div class="ans-hint">답만 간단히 적으세요. 풀이 과정은 마지막에 사진으로 제출합니다.</div>
+            <input type="text" class="ans-input" id="ans" placeholder="예: x = 3, y = 7">
+        </div></div>
+    </div>
+
+    <!-- ===== SCREEN: SUBMIT ===== -->
+    <div class="screen" id="s-submit"><div class="card"><div class="submit-pad">
+        <h2>📝 답안 확인 & 제출</h2>
+        <div class="submit-sub">답을 확인하고 풀이 과정 사진을 업로드한 후 제출하세요.</div>
+        <div id="ans-preview" style="margin-bottom:20px"></div>
+        <div class="upload-section">
+            <div class="upload-label">📸 풀이 과정 업로드</div>
+            <div class="upload-desc">풀이 과정을 사진 또는 PDF로 업로드하세요. 여러 파일 선택 가능합니다.</div>
+            <div class="upload-area"><input type="file" id="file-input" multiple accept="image/*,.pdf" onchange="handleFiles(event)"><div class="upload-icon">📎</div><div class="upload-text"><b>터치하여 파일 선택</b> 또는 드래그 앤 드롭</div></div>
+            <div class="file-list" id="file-list"></div>
+        </div>
+        <button class="btn-submit email" id="btn-email" onclick="submitEmail()">📧 제출하기</button>
+        <button class="btn-submit back" onclick="backToQ()">← 문제로 돌아가기</button>
+        <div class="sending-text" id="sending-text"></div>
+    </div></div></div>
+
+    <!-- ===== SCREEN: DONE ===== -->
+    <div class="screen" id="s-done"><div class="card"><div class="done-pad">
+        <div class="done-icon">🎉</div>
+        <h2>제출 완료! 수고했어요!</h2>
+        <div class="done-msg">답안이 선생님에게 전송되었습니다.<br>꼼꼼히 분석해서 결과를 보내드릴게요.</div>
+
+        <div class="done-card" style="background:#FFF9DB;border-color:#FEE500">
+            <h3 style="color:#3C1E1E">💬 결과를 받으시려면 오픈채팅으로 연락해 주세요!</h3>
+            <p>아래 카카오톡 오픈채팅 버튼을 눌러 <b>학생 이름</b>과 <b>학년</b>을 채팅창에 남겨주시면,<br>48시간 내에 분석 결과와 함께 무료 상담을 진행해 드립니다.</p>
+            <p style="margin-top:8px;font-size:11px;color:var(--s5)">예시: "홍길동 Year 10 레벨테스트 결과 부탁드립니다"</p>
+        </div>
+
+        <button class="kakao-btn" onclick="window.open('https://open.kakao.com/o/ssOgKj8h','_blank')">💬 카카오톡 오픈채팅으로 연락하기</button>
+
+        <div class="done-card" style="margin-top:12px">
+            <h3>📊 앞으로의 진행 과정</h3>
+            <div class="done-timeline">
+                <div class="done-step"><div class="ds-icon">✅</div><div class="ds-text">테스트<br>완료</div></div>
+                <div class="done-arrow">→</div>
+                <div class="done-step"><div class="ds-icon">💬</div><div class="ds-text">오픈채팅<br>연락</div></div>
+                <div class="done-arrow">→</div>
+                <div class="done-step"><div class="ds-icon">📋</div><div class="ds-text">결과<br>리포트</div></div>
+                <div class="done-arrow">→</div>
+                <div class="done-step"><div class="ds-icon">🎯</div><div class="ds-text">무료<br>상담</div></div>
+            </div>
+        </div>
+
+        <button class="btn-big secondary" onclick="reset()">처음으로 돌아가기</button>
+    </div></div></div>
+
+    <!-- ===== SCREEN: REVIEW (teacher) ===== -->
+    <div class="screen" id="s-review"><div class="card"><div class="review-pad">
+        <h2>📋 Answer Review</h2><div class="rv-sub">학생 답안 확인 (선생님용)</div>
+        <div class="rv-name" id="rv-name"></div><div class="rv-date" id="rv-date"></div>
+        <div id="rv-contact-box"></div>
+        <div class="rv-stats" id="rv-stats"></div>
+        <div id="rv-cards"></div>
+        <div id="rv-imgs"></div>
+        <div class="rv-btns">
+            <button class="btn-submit back" onclick="reset()">← 처음으로</button>
+            <button class="btn-submit download" onclick="window.print()">🖨️ 인쇄</button>
+        </div>
+    </div></div></div>
+
+</div></div>
+
+<div class="fixed-nav" id="fnav">
+    <button class="btn btn-prev" id="bp" onclick="go(-1)" disabled>← Prev</button>
+    <div class="page-indicator" id="pi">1/25</div>
+    <button class="btn btn-next" id="bn" onclick="go(1)">Next →</button>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== EmailJS Config =====
+const EJS_KEY='EMOoQhWuKVAJ74Oiu';
+const EJS_SVC='service_1dwyydc';
+const EJS_TPL='template_7zwxoym';
+const TEACHER='shoybk0115@gmail.com';
+emailjs.init(EJS_KEY);
+
+// ===== Question Data =====
+const Q=[
+{p:'a',pt:'Algebraic Foundations',pf:'Focus: Computational fluency without a calculator.',pm:'15 min',n:'Q1',c:'Surds',
+b:`<p>Simplify the following expression to find the exact value:</p><div class="math-box"><span class="m"><span class="frac"><span class="top">√50 − √8</span><span class="bot">√2</span></span></span></div>`},
+{p:'a',pt:'Algebraic Foundations',pf:'Focus: Computational fluency without a calculator.',pm:'15 min',n:'Q2',c:'Algebraic Fractions',
+b:`<p>Simplify the expression fully:</p><div class="math-box"><span class="m"><span class="frac"><span class="top">x<span class="sup">2</span> − 9</span><span class="bot">x<span class="sup">2</span> + 5x + 6</span></span></span></div>`},
+{p:'a',pt:'Algebraic Foundations',pf:'Focus: Computational fluency without a calculator.',pm:'15 min',n:'Q3',c:'Simultaneous Equations',
+b:`<p>Solve the simultaneous equations:</p><div class="math-box"><span class="m">y = 2x + 1</span></div><div class="math-box"><span class="m">x<span class="sup">2</span> + y<span class="sup">2</span> = 10</span></div>`},
+{p:'a',pt:'Algebraic Foundations',pf:'Focus: Computational fluency without a calculator.',pm:'15 min',n:'Q4',c:'Indices',
+b:`<p>Simplify fully, giving your answer with positive indices:</p><div class="math-box"><span class="m"><span class="frac"><span class="top">(2x<span class="sup">3</span>y<span class="sup">−2</span>)<span class="sup">3</span></span><span class="bot">(4x<span class="sup">−1</span>y)<span class="sup">2</span></span></span></span></div>`},
+{p:'a',pt:'Algebraic Foundations',pf:'Focus: Computational fluency without a calculator.',pm:'15 min',n:'Q5',c:'Quadratic Inequalities',
+b:`<p>Solve the inequality and show your solution on a number line:</p><div class="math-box"><span class="m">x<span class="sup">2</span> − 5x + 6 < 0</span></div>`},
+{p:'b',pt:'IGCSE Core Application',pf:'Focus: Logical reasoning and proof-style questions.',pm:'25 min',n:'Q6',c:'Coordinate Geometry',
+b:`<p>The equation of line <span class="m">L₁</span> is <span class="m">2y + 3x = 12</span>.</p><div class="sub"><p><strong>(a)</strong> Find the gradient of <span class="m">L₁</span>.</p><p><strong>(b)</strong> Line <span class="m">L₂</span> is perpendicular to <span class="m">L₁</span> and passes through the point <span class="m">(6, 1)</span>. Find the equation of <span class="m">L₂</span>.</p><p><strong>(c)</strong> Find the coordinates of the point where <span class="m">L₁</span> and <span class="m">L₂</span> intersect.</p></div>`},
+{p:'b',pt:'IGCSE Core Application',pf:'Focus: Logical reasoning and proof-style questions.',pm:'25 min',n:'Q7',c:'Mathematical Modeling',
+b:`<p>A triangle has sides of length <span class="m">(x + 1)</span> cm, <span class="m">(2x − 3)</span> cm and <span class="m">x</span> cm. The perimeter of the triangle is 26 cm.</p><div class="sub"><p><strong>(a)</strong> Find the value of <span class="m">x</span>.</p><p><strong>(b)</strong> <strong>Show that</strong> the triangle is right-angled.</p></div>`},
+{p:'b',pt:'IGCSE Core Application',pf:'Focus: Logical reasoning and proof-style questions.',pm:'25 min',n:'Q8',c:'Circle Theorems',
+b:`<p>A, B, C and D are points on a circle with centre O. Angle <span class="m">ABC = 112°</span>.</p><div class="sub"><p><strong>(a)</strong> Find angle <span class="m">ADC</span>. Give a reason for your answer.</p><p><strong>(b)</strong> Find angle <span class="m">AOC</span>. Give a reason for your answer.</p></div>`},
+{p:'b',pt:'IGCSE Core Application',pf:'Focus: Logical reasoning and proof-style questions.',pm:'25 min',n:'Q9',c:'Sequences (Geometric)',
+b:`<p>The first three terms of a geometric sequence are <span class="m">2, 6, 18, ...</span></p><div class="sub"><p><strong>(a)</strong> Find the common ratio.</p><p><strong>(b)</strong> Find the 8th term.</p><p><strong>(c)</strong> Find the sum of the first 10 terms.</p></div>`},
+{p:'b',pt:'IGCSE Core Application',pf:'Focus: Logical reasoning and proof-style questions.',pm:'25 min',n:'Q10',c:'Probability',
+b:`<p>A bag contains 4 red balls and 6 blue balls. Two balls are drawn at random <strong>without replacement</strong>.</p><div class="sub"><p><strong>(a)</strong> Draw a tree diagram to show all possible outcomes.</p><p><strong>(b)</strong> Find the probability that both balls are the same colour.</p></div>`},
+{p:'b',pt:'IGCSE Core Application',pf:'Focus: Logical reasoning and proof-style questions.',pm:'25 min',n:'Q11',c:'Vectors',
+b:`<p>In triangle OAB, M is the midpoint of AB.</p><p><span class="m">OA = <b>a</b></span> and <span class="m">OB = <b>b</b></span>.</p><div class="sub"><p><strong>(a)</strong> Express <span class="m">AB</span> in terms of <span class="m"><b>a</b></span> and <span class="m"><b>b</b></span>.</p><p><strong>(b)</strong> Express <span class="m">OM</span> in terms of <span class="m"><b>a</b></span> and <span class="m"><b>b</b></span>.</p><p><strong>(c)</strong> Point P lies on OM such that <span class="m">OP = (2/3)OM</span>. Express <span class="m">AP</span> in terms of <span class="m"><b>a</b></span> and <span class="m"><b>b</b></span>.</p></div>`},
+{p:'b',pt:'IGCSE Core Application',pf:'Focus: Logical reasoning and proof-style questions.',pm:'25 min',n:'Q12',c:'Sets & Venn Diagrams',
+b:`<p>In a class of 40 students, 25 study Biology, 22 study Chemistry, and 8 study neither subject.</p><div class="sub"><p><strong>(a)</strong> Find the number of students who study both subjects.</p><p><strong>(b)</strong> Find the probability that a randomly chosen student studies Biology but not Chemistry.</p></div>`},
+{p:'c',pt:'Add Math: Functions & Algebra',pf:'Focus: Connecting multiple concepts.',pm:'20 min',n:'Q13',c:'Numerical Methods',
+b:`<p>Given <span class="m">y = x³ − 3x + 1</span>,</p><p style="margin-top:12px">explain why there must be a root between <span class="m">x = −2</span> and <span class="m">x = −1</span>.</p>`},
+{p:'c',pt:'Add Math: Functions & Algebra',pf:'Focus: Connecting multiple concepts.',pm:'20 min',n:'Q14',c:'Composite & Inverse Functions',
+b:`<p>Let <span class="m">f(x) = 3x − 5</span> and <span class="m">g(x) = x² + 2</span>.</p><div class="sub"><p><strong>(a)</strong> Find <span class="m">gf(x)</span>. Simplify your answer.</p><p><strong>(b)</strong> Solve the equation <span class="m">gf(x) = g(x)</span>.</p><p><strong>(c)</strong> Find <span class="m">f<span class="sup">−1</span>(x)</span>.</p></div>`},
+{p:'c',pt:'Add Math: Functions & Algebra',pf:'Focus: Connecting multiple concepts.',pm:'20 min',n:'Q15',c:'The Discriminant',
+b:`<p>The equation</p><div class="math-box"><span class="m">(k + 1)x<span class="sup">2</span> + (4k)x + 9 = 0</span></div><p>has <strong>exactly one</strong> real root.</p><div class="sub"><p><strong>(a)</strong> Find the possible values of <span class="m">k</span>.</p><p><strong>(b)</strong> For each value of <span class="m">k</span>, find the corresponding root of the equation.</p></div>`},
+{p:'c',pt:'Add Math: Functions & Algebra',pf:'Focus: Connecting multiple concepts.',pm:'20 min',n:'Q16',c:'Logarithms & Exponentials',
+b:`<p>Solve the following equations:</p><div class="sub"><p><strong>(a)</strong> <span class="m">log₂(x) + log₂(x − 6) = 4</span></p><p><strong>(b)</strong> <span class="m">3<span class="sup">x+1</span> = 5<span class="sup">x−2</span></span></p><p style="margin-top:4px;font-size:13px;color:var(--s5)">(Give your answer in the form <span class="m">x = ln a / ln b</span>)</p></div>`},
+{p:'c',pt:'Add Math: Functions & Algebra',pf:'Focus: Connecting multiple concepts.',pm:'20 min',n:'Q17',c:'Binomial Expansion',
+b:`<p>In the expansion of <span class="m">(2 + kx)<span class="sup">6</span></span> :</p><div class="sub"><p><strong>(a)</strong> Find the first 3 terms in ascending powers of <span class="m">x</span>.</p><p><strong>(b)</strong> Given that the coefficient of <span class="m">x<span class="sup">2</span></span> is 60, find the value of <span class="m">k</span>.</p></div>`},
+{p:'c',pt:'Add Math: Functions & Algebra',pf:'Focus: Connecting multiple concepts.',pm:'20 min',n:'Q18',c:'Factor & Remainder Theorem',
+b:`<p><span class="m">f(x) = 2x³ + ax² − 5x + b</span></p><p style="margin-top:8px">Given that <span class="m">(x − 1)</span> is a factor of <span class="m">f(x)</span> and <span class="m">f(−2) = 15</span> :</p><div class="sub"><p><strong>(a)</strong> Find the values of <span class="m">a</span> and <span class="m">b</span>.</p><p><strong>(b)</strong> Factorise <span class="m">f(x)</span> completely.</p></div>`},
+{p:'d',pt:'Calculus & Trigonometry',pf:'Focus: Differentiation, integration, trig.',pm:'15 min',n:'Q19',c:'Differentiation & Curve Properties',
+b:`<p>A curve has the equation <span class="m">y = 2x² − 8x + 6</span>.</p><div class="sub"><p><strong>(a)</strong> Express <span class="m">2x² − 8x + 6</span> in the form <span class="m">a(x − p)² + q</span>.</p><p><strong>(b)</strong> State the coordinates of the turning point of the curve.</p><p><strong>(c)</strong> Find <span class="m"><span class="frac"><span class="top">dy</span><span class="bot">dx</span></span></span> and verify that the gradient at the turning point is zero.</p><p><strong>(d)</strong> The line <span class="m">y = kx</span> is a tangent to the curve. Find the value of <span class="m">k</span>.</p></div>`},
+{p:'d',pt:'Calculus & Trigonometry',pf:'Focus: Differentiation, integration, trig.',pm:'15 min',n:'Q20',c:'Trigonometric Equations',
+b:`<p>Solve the equation for <span class="m">0° ≤ θ ≤ 360°</span> without using a calculator:</p><div class="math-box"><span class="m">2cos²θ + sinθ − 1 = 0</span></div>`},
+{p:'d',pt:'Calculus & Trigonometry',pf:'Focus: Differentiation, integration, trig.',pm:'15 min',n:'Q21',c:'Integration',
+b:`<p>A curve has the equation <span class="m">y = x² − 4x + 3</span>.</p><div class="sub"><p><strong>(a)</strong> Find the x-intercepts of the curve.</p><p><strong>(b)</strong> Calculate the area enclosed between the curve and the x-axis.</p></div>`},
+{p:'d',pt:'Calculus & Trigonometry',pf:'Focus: Differentiation, integration, trig.',pm:'15 min',n:'Q22',c:'Circular Measure (Radians)',
+b:`<p>A sector of a circle has radius <span class="m">8 cm</span> and angle <span class="m">1.5 radians</span>.</p><div class="sub"><p><strong>(a)</strong> Find the arc length of the sector.</p><p><strong>(b)</strong> Find the area of the sector.</p><p><strong>(c)</strong> Find the area of the segment (region between the chord and the arc).</p></div>`},
+{p:'d',pt:'Calculus & Trigonometry',pf:'Focus: Differentiation, integration, trig.',pm:'15 min',n:'Q23',c:'Kinematics',
+b:`<p>A particle moves in a straight line. Its velocity <span class="m">v</span> m/s at time <span class="m">t</span> seconds is given by</p><div class="math-box"><span class="m">v = 3t<span class="sup">2</span> − 12t + 9</span></div><p>for <span class="m">t ≥ 0</span>.</p><div class="sub"><p><strong>(a)</strong> Find the values of <span class="m">t</span> when the particle is at rest.</p><p><strong>(b)</strong> Find the acceleration when <span class="m">t = 2</span>.</p><p><strong>(c)</strong> Find the total distance travelled in the first 3 seconds.</p></div>`},
+{p:'e',pt:'Challenge Problems',pf:'Focus: Multi-step reasoning.',pm:'5 min',n:'Q24',c:'Permutations & Combinations',
+b:`<p>A committee of 5 people is to be chosen from 6 men and 4 women.</p><div class="sub"><p><strong>(a)</strong> Find the total number of ways to form the committee.</p><p><strong>(b)</strong> Find the number of ways if the committee must contain <strong>at least 2 women</strong>.</p></div>`},
+{p:'e',pt:'Challenge Problems',pf:'Focus: Multi-step reasoning.',pm:'5 min',n:'Q25',c:'Optimization (Calculus + Modeling)',
+b:`<p>A farmer has <span class="m">60 m</span> of fencing to enclose a rectangular pen against an existing wall. The wall forms one side of the rectangle. Let <span class="m">x</span> be the length of the sides perpendicular to the wall.</p><div class="sub"><p><strong>(a)</strong> <strong>Show that</strong> the area <span class="m">A</span> of the pen is given by <span class="m">A = 60x − 2x²</span>.</p><p><strong>(b)</strong> Find <span class="m"><span class="frac"><span class="top">dA</span><span class="bot">dx</span></span></span> and hence find the value of <span class="m">x</span> that maximises the area.</p><p><strong>(c)</strong> Find the maximum area of the pen.</p><p><strong>(d)</strong> Verify that this is a maximum using the second derivative test.</p></div>`}
+];
+
+const PC={a:'part-a',b:'part-b',c:'part-c',d:'part-d',e:'part-e'};
+const PL={a:'Part A',b:'Part B',c:'Part C',d:'Part D',e:'Part E'};
+let idx=0,A=Array(Q.length).fill(''),sN='',sY='',sSch='',sCon='',sEm='',UF=[];
+let isAddMath=false;
+let AQ=[]; // Active questions (filtered)
+let AMap=[]; // Maps AQ index → Q index (for answers)
+
+// ===== Add Math Toggle =====
+function setAddMath(v){
+    isAddMath=v;
+    document.getElementById('addm-yes').classList.toggle('active',v);
+    document.getElementById('addm-no').classList.toggle('active',!v);
+    const info=document.getElementById('addm-info');
+    if(v){
+        info.innerHTML='<span class="addm-tag full">IGCSE + Add Math</span> 25문항 · 45분 · 전 영역 종합 진단';
+    }else{
+        info.innerHTML='<span class="addm-tag igcse">IGCSE Only</span> 12문항 · 30분 · 기초~핵심 적용';
+    }
+}
+
+function buildActiveQuestions(){
+    AQ=[];AMap=[];
+    Q.forEach((q,i)=>{
+        if(isAddMath || q.p==='a' || q.p==='b'){
+            AMap.push(i);
+            AQ.push(q);
+        }
+    });
+}
+
+// ===== UI Helpers =====
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');document.getElementById('scroll').scrollTop=0}
+function prog(v){document.getElementById('pf').style.width=v+'%'}
+function fnv(v){document.getElementById('fnav').classList.toggle('show',v)}
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500)}
+
+// ===== Start Test =====
+function startTest(){
+    const name=document.getElementById('inp-name').value.trim();
+    const year=document.getElementById('inp-year').value;
+    const contact=document.getElementById('inp-contact').value.trim();
+    const errEl=document.getElementById('reg-error');
+
+    if(!name||!year||!contact){
+        errEl.textContent='⚠ 학생 이름, 학년, 보호자 연락처는 필수입니다.';
+        errEl.style.display='block';
+        return;
+    }
+    errEl.style.display='none';
+
+    sN=name;
+    sY=year;
+    sSch=document.getElementById('inp-school').value.trim()||'';
+    sCon=contact;
+    sEm=document.getElementById('inp-email').value.trim()||'';
+
+    buildActiveQuestions();
+    A=Array(Q.length).fill('');
+    // Update top badge
+    document.querySelector('.top-badge').textContent=isAddMath?'Full · 25Q · 45min':'IGCSE · 12Q · 30min';
+
+    idx=0;render();show('s-q');fnv(true);
+}
+
+// ===== Question Navigation =====
+function sv(){A[AMap[idx]]=document.getElementById('ans').value}
+function render(){
+    const q=AQ[idx];
+    document.getElementById('ps').className='part-strip '+PC[q.p];
+    document.getElementById('pb').textContent=PL[q.p];
+    document.getElementById('pt').textContent=q.pt;
+    document.getElementById('pfo').textContent=q.pf;
+    document.getElementById('ptm').textContent=q.pm;
+    document.getElementById('qn').textContent=q.n;
+    document.getElementById('qc').textContent=q.c;
+    document.getElementById('qb').innerHTML=q.b;
+    document.getElementById('ans').value=A[AMap[idx]]||'';
+    document.getElementById('pi').textContent=(idx+1)+'/'+AQ.length;
+    document.getElementById('bp').disabled=idx===0;
+    document.getElementById('bn').textContent=idx===AQ.length-1?'제출 →':'Next →';
+    document.getElementById('qd').classList.toggle('on',!!A[AMap[idx]]);
+    prog((idx+1)/AQ.length*100);
+    document.getElementById('scroll').scrollTop=0;
+}
+function go(step){sv();idx+=step;if(idx>=AQ.length){showSubmit();return}if(idx<0)idx=0;render()}
+function backToQ(){idx=AQ.length-1;render();show('s-q');fnv(true)}
+
+// ===== Submit Screen =====
+function showSubmit(){
+    fnv(false);show('s-submit');prog(100);
+    const box=document.getElementById('ans-preview');box.innerHTML='';
+    let curPart='';
+    const colors={a:'var(--b1);color:var(--b7)',b:'var(--a1);color:var(--a6)',c:'var(--v1);color:var(--v6)',d:'var(--e1);color:var(--e6)',e:'var(--r1);color:var(--r6)'};
+    AQ.forEach((q,j)=>{
+        if(q.p!==curPart){curPart=q.p;
+            box.innerHTML+=`<div class="part-sep"><span class="ps-badge" style="background:${colors[q.p]}">${PL[q.p]}</span><span class="ps-name">${q.pt}</span></div>`;
+        }
+        const a=A[AMap[j]]||'';
+        box.innerHTML+=`<div class="ap-row"><div class="ap-num">${q.n}</div><div class="ap-ans${a?'':' empty'}">${a?a.replace(/</g,'&lt;'):'미작성'}</div></div>`;
+    });
+}
+
+// ===== File Upload =====
+function handleFiles(e){
+    Array.from(e.target.files).forEach(f=>{
+        if(f.size>10*1024*1024){toast('⚠ 10MB 이하만 가능');return}
+        const r=new FileReader();
+        r.onload=ev=>{UF.push({name:f.name,size:f.size,type:f.type,data:ev.target.result});renderFL()};
+        r.readAsDataURL(f);
+    });e.target.value='';
+}
+function renderFL(){
+    const box=document.getElementById('file-list');box.innerHTML='';
+    UF.forEach((f,j)=>{box.innerHTML+=`<div class="file-item"><span>📄</span><span class="fname">${f.name}</span><span class="fsize">${Math.round(f.size/1024)}KB</span><button class="file-remove" onclick="UF.splice(${j},1);renderFL()">✕</button></div>`});
+}
+
+// ===== Email Submit =====
+async function submitEmail(){
+    const btn=document.getElementById('btn-email'),st=document.getElementById('sending-text');
+    btn.disabled=true;btn.textContent='전송 중...';st.textContent='답안을 전송하고 있습니다...';
+
+    const done=AQ.reduce((c,q,j)=>(A[AMap[j]]&&A[AMap[j]].trim())?c+1:c,0);
+    const mode=isAddMath?'IGCSE+AddMath (25Q)':'IGCSE Only (12Q)';
+    let txt=`[ML MATH 레벨테스트]\n`;
+    txt+=`학생: ${sN}\n학교: ${sSch||'-'}\n학년: ${sY}\n`;
+    txt+=`보호자 연락처: ${sCon}\n보호자 이메일: ${sEm||'-'}\n`;
+    txt+=`테스트: ${mode}\n작성: ${done}/${AQ.length}\n\n`;
+    AQ.forEach((q,j)=>{txt+=`${q.n}: ${A[AMap[j]]||'-'}\n`});
+    txt+=`\n풀이 이미지: ${UF.length}개`;
+
+    const timeout=ms=>new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),ms));
+    try{
+        await Promise.race([
+            emailjs.send(EJS_SVC,EJS_TPL,{to_email:TEACHER,student_name:sN,year_group:sY,submit_time:new Date().toLocaleString('ko-KR'),answers_text:txt}),
+            timeout(10000)
+        ]);
+        downloadJSON(true);
+        show('s-done');prog(100);fnv(false);
+    }catch(err){
+        console.error('Email error:',err);
+        downloadJSON(true);
+        st.innerHTML='⚠ 전송이 지연되고 있습니다. <b>답안 파일이 자동 저장되었습니다.</b><br>저장된 파일을 카카오톡으로 선생님에게 보내주시면 됩니다.';
+        btn.disabled=false;btn.textContent='📧 다시 시도';
+    }
+}
+
+// ===== Download JSON =====
+function downloadJSON(silent){
+    const d={studentName:sN,school:sSch,yearGroup:sY,parentContact:sCon,parentEmail:sEm,testMode:isAddMath?'IGCSE+AddMath':'IGCSE Only',totalQuestions:AQ.length,date:new Date().toLocaleString('ko-KR'),answers:AQ.map((q,j)=>({num:q.n,cat:q.c,part:PL[q.p],answer:A[AMap[j]]||''})),images:UF.map(f=>({name:f.name,type:f.type,data:f.data}))};
+    const blob=new Blob([JSON.stringify(d,null,2)],{type:'application/json'});
+    const u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;
+    a.download=`ML_MATH_${sN.replace(/[^a-zA-Z0-9가-힣]/g,'_')}_${new Date().toISOString().slice(0,10)}.json`;
+    a.click();URL.revokeObjectURL(u);
+    if(!silent)toast('✓ 저장 완료!');
+}
+
+// ===== Teacher: Load JSON =====
+function loadFile(e){
+    const f=e.target.files[0];if(!f)return;
+    const r=new FileReader();
+    r.onload=function(ev){
+        try{const d=JSON.parse(ev.target.result);
+        sN=d.studentName||'';sY=d.yearGroup||'';sSch=d.school||'';sCon=d.parentContact||'';sEm=d.parentEmail||'';
+        isAddMath=(d.testMode||'').includes('Add');
+        buildActiveQuestions();
+        A=Array(Q.length).fill('');
+        if(d.answers)d.answers.forEach((ans)=>{
+            const qi=Q.findIndex(q=>q.n===ans.num);
+            if(qi>=0)A[qi]=ans.answer||'';
+        });
+        openReview(d.images||[]);toast('✓ 불러왔습니다!')}catch(err){toast('⚠ 파일 오류')}
+    };r.readAsText(f);e.target.value='';
+}
+
+// ===== Teacher: Review =====
+function openReview(imgs){
+    const mode=isAddMath?'IGCSE + Add Math (25Q)':'IGCSE Only (12Q)';
+    document.getElementById('rv-name').textContent='👤 '+sN+(sY?' ('+sY+')':'');
+    document.getElementById('rv-date').textContent=mode+' · '+new Date().toLocaleString('ko-KR');
+
+    const cb=document.getElementById('rv-contact-box');
+    if(sCon||sEm||sSch){
+        cb.innerHTML=`<div class="rv-contact"><h4>📱 연락처 정보</h4>`
+            +(sSch?`<p><b>학교:</b> ${sSch}</p>`:'')
+            +(sCon?`<p><b>보호자 연락처:</b> ${sCon}</p>`:'')
+            +(sEm?`<p><b>보호자 이메일:</b> ${sEm}</p>`:'')
+            +`</div>`;
+    }
+
+    const done=AQ.reduce((c,q,j)=>(A[AMap[j]]&&A[AMap[j]].trim())?c+1:c,0);
+    document.getElementById('rv-stats').innerHTML=`<div class="rv-stat"><div class="n">${done}</div><div class="l">작성</div></div><div class="rv-stat"><div class="n">${AQ.length-done}</div><div class="l">미작성</div></div><div class="rv-stat"><div class="n">${imgs.length}</div><div class="l">풀이 이미지</div></div>`;
+
+    const box=document.getElementById('rv-cards');box.innerHTML='';
+    let curPart='';
+    const colors={a:'var(--b1);color:var(--b7)',b:'var(--a1);color:var(--a6)',c:'var(--v1);color:var(--v6)',d:'var(--e1);color:var(--e6)',e:'var(--r1);color:var(--r6)'};
+    AQ.forEach((q,j)=>{
+        if(q.p!==curPart){curPart=q.p;
+            box.innerHTML+=`<div class="part-sep"><span class="ps-badge" style="background:${colors[q.p]}">${PL[q.p]}</span><span class="ps-name">${q.pt}</span></div>`;
+        }
+        const a=A[AMap[j]]||'';
+        box.innerHTML+=`<div class="rv-card"><div class="rv-head"><div class="rv-num">${q.n}</div><div class="rv-cat">${q.c}</div><div class="rv-tag ${a?'ok':'no'}">${a?'✓':'—'}</div></div><div class="rv-body${a?'':' empty'}">${a?a.replace(/</g,'&lt;'):'미작성'}</div></div>`;
+    });
+
+    const ib=document.getElementById('rv-imgs');ib.innerHTML='';
+    if(imgs.length>0){
+        let h='<div class="card" style="margin-top:16px"><div class="rv-images"><h4>📸 풀이 과정 ('+imgs.length+'개)</h4>';
+        imgs.forEach(img=>{h+=img.type&&img.type.startsWith('image/')?`<img class="rv-img" src="${img.data}" alt="${img.name}">`:`<div class="file-item"><span>📄</span><span class="fname">${img.name}</span><span class="fsize">PDF</span></div>`});
+        h+='</div></div>';ib.innerHTML=h;
+    }
+    show('s-review');fnv(false);prog(100);
+}
+
+// ===== Reset =====
+function reset(){idx=0;A=Array(Q.length).fill('');sN='';sY='';sSch='';sCon='';sEm='';UF=[];isAddMath=false;AQ=[];AMap=[];
+    document.getElementById('inp-name').value='';document.getElementById('inp-year').value='';
+    document.getElementById('inp-school').value='';document.getElementById('inp-contact').value='';
+    document.getElementById('inp-email').value='';setAddMath(false);
+    document.querySelector('.top-badge').textContent='Free Diagnostic Test';
+    prog(0);fnv(false);show('s-landing')}
+</script>
+</body>
+</html>
